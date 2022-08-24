@@ -27,5 +27,13 @@ export default{
             url:'/user/base/check',
             params:data
         })
+    },
+    // 修改资料
+    profile(data = {})
+    {
+        return UPLOAD({
+            url:'/user/base/profile',
+            params:data
+        })
     }
 }

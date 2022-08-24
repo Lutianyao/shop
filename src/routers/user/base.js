@@ -24,4 +24,11 @@ export default [
         name:'BaseLogin',
         component: () => import('components/user/base/login.vue')
     },
+    // 修改资料
+    {
+        path:'base/profile',
+        name:'BaseProfile',
+        component: () => import('components/user/base/profile.vue')
+    },
+    
 ]

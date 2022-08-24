@@ -9,26 +9,19 @@
         <div class="R"><img src="/assets/images/tr.png"></div>
     </div>
     <div class="clear"></div>
-    <div class="aui-m-slider">
-        <div class="m-slider" data-ydui-slider>
-            <div class="slider-wrapper">
-                <div class="slider-item"> <a href="javascript:;"> <img src="/assets/images/banner.jpg"> </a> </div>
-                <div class="slider-item"> <a href="javascript:;"> <img src="/assets/images/banner.jpg"> </a> </div>
-                <div class="slider-item"> <a href="javascript:;"> <img src="/assets/images/banner.jpg"> </a> </div>
-                <div class="slider-item"> <a href="javascript:;"> <img src="/assets/images/banner.jpg"> </a> </div>
-            </div>
-            <div class="slider-pagination"></div>
-        </div>
-    </div>
+    <!-- 轮播图 -->
+    <van-swipe :autoplay="3000" indicator-color="white">
+        <van-swipe-item v-for="item in RecomList" :key="item.id">
+            <img :src="item.cover_cdn">
+        </van-swipe-item> 
+    </van-swipe>
     <div class="clear"></div>
     <div class="lqgwBox">
-        <div class="titbox">先领券/再购物</div>
-        <div class="img"><img src="/assets/images/1.jpg"></div>
         <ul>
-            <li><a href="list.html"><img src="/assets/images/icon_1.png">
-                    <p>桌子</p>
-                </a></li>
-            
+            <li v-for="item in TypeList" :key="item.id"><a href=""><img :src="item.cover_cdn">
+                    <p>{{item.name}}</p>
+                </a>
+            </li>
         </ul>
     </div>
     <div class="clear"></div>
@@ -183,6 +176,26 @@ import Tab from 'components/common/Tab.vue'
 export default {
     components:{
         Tab
-    }
+    },
+    data(){
+        return{
+            TypeList:[],
+            RecomList:[]
+        }
+    },
+    methods:{
+        async GetData(){
+            let result = await this.$api.HomeList()
+            if(result.code === 1)
+            {
+                this.TypeList = result.data.TypeList
+                this.RecomList = result.data.RecomList
+            }
+        }
+    },
+    // 生命周期
+    created() {
+        this.GetData()
+    },
 }
 </script>

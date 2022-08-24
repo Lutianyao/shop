@@ -9,7 +9,7 @@
     </div>
     <div class="clear"></div>
     <div class="allkbox"></div>
-    <div class="myboxcon">
+    <div class="myboxcon" @click="onProfile">
         <p>基本资料</p>
         <img src="/assets/images/go.png">
     </div>
@@ -17,7 +17,7 @@
         <p>邮箱认证</p>
         <img src="/assets/images/go.png">
     </div>
-    <div class="myboxcon">
+    <div class="myboxcon" @click="Address">
         <p>我的收货地址</p>
         <img src="/assets/images/go.png">
     </div>
@@ -34,7 +34,7 @@
         <img src="/assets/images/go.png">
     </div>
     <div class="myboxcon" @click="onLogout">
-        <p>退出登录</p>
+        <p>注销登录</p>
         <img src="/assets/images/go.png">
     </div>
 
@@ -74,6 +74,15 @@ export default {
             }).catch(() => {
                 console.log('点击取消')
             })
+        },
+        onProfile()
+        {
+            // 设置跳转路由
+            this.$router.push('/user/base/profile')
+        },
+        Address()
+        {
+            this.$router.push('/user/address/index')
         }
     },
 }
