@@ -15,6 +15,13 @@ export default {
             params: data
         })
     },
+    // 收货地址详情
+    addressInfo(data = {}){
+        return POST({
+            url:'/user/address/info',
+            params: data
+        })
+    },
     // 编辑收货地址
     AddressEdit(data = {}){
         return POST({

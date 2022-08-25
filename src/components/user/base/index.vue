@@ -7,7 +7,6 @@
         </div>
         <div class="R"><img src="/assets/images/go.png" /></div>
     </div>
-    <div class="clear"></div>
     <div class="allkbox"></div>
     <div class="myboxcon" @click="onProfile">
         <p>基本资料</p>
@@ -37,10 +36,6 @@
         <p>注销登录</p>
         <img src="/assets/images/go.png">
     </div>
-
-    <div class="clear"></div>
-    <div class="h54"></div>
-    <div class="clear"></div>
     <Tab />
 </template>
 <script>

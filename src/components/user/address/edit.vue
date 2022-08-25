@@ -1,6 +1,5 @@
 <template>
     <van-nav-bar title="新增收货地址"
-        left-text="返回"
         left-arrow
         @click-left="onClickLeft" 
     />
@@ -31,7 +30,8 @@ export default {
         return {
             areaList:areaList,
             addressid:null,
-            Address:{}
+            Address:{},
+            LoginUser:this.$cookies.get('LoginUser')
         }
     },
     methods: {
@@ -39,9 +39,10 @@ export default {
         {
             this.$router.push('/user/address/index')
         },
+
         async AddressInfo()
         {
-            let result = await this.$api.AddressEdit({addressid:this.addressid})
+            let result = await this.$api.addressInfo({addressid:this.addressid})
 
             if(result.code === 0)
             {
@@ -66,9 +67,37 @@ export default {
             }
             this.Address = address
         },
-        onSave(){
+        // 保存
+        async onSave(value){
+            let data = {
+                consignee:value.name,
+                mobile:value.tel,
+                code:value.areaCode,
+                status:value.isDefault ? 1 : 0,
+                address:value.addressDetail,
+                addressid:this.addressid,
+                userid:this.LoginUser.id
+            }
+            let result = await this.$api.AddressEdit(data)
 
+            if(result.code === 1)
+            {
+                this.$notify({
+                    type:'success',
+                    message:result.msg,
+                    onClose:() => {
+                        this.$router.push('/user/address/index')
+                    }
+                })
+            }else{
+                this.$notify({
+                    type:'warning',
+                    message:result.msg,
+                })
+            }
+            
         },
+        // 删除
         onDelete(){
             
         }

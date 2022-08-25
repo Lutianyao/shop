@@ -16,11 +16,13 @@
         </van-swipe-item> 
     </van-swipe>
     <div class="clear"></div>
+    <!-- 菜单分类 -->
     <div class="lqgwBox">
         <ul>
-            <li v-for="item in TypeList" :key="item.id"><a href=""><img :src="item.cover_cdn">
-                    <p>{{item.name}}</p>
-                </a>
+            <li v-for="item in TypeList" :key="item.id">
+            <router-link :to="{path:'/product/product/index',query:{typeid:item.id}}"><img :src="item.cover_cdn">
+                <p>{{item.name}}</p>
+            </router-link>
             </li>
         </ul>
     </div>
