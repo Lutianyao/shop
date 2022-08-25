@@ -1,7 +1,7 @@
 <template>
     <van-nav-bar title="收货地址" left-arrow @click-left="onClickLeft" />
 
-    <van-address-list v-model="chosenAddressId" :list="list" default-tag-text="默认" @add="onAdd" @edit="onEdit" />
+    <van-address-list v-model="chosenAddressId" :list="list" default-tag-text="默认" @add="onAdd" @edit="onEdit" @select="onSelect" />
 
 
 </template>
@@ -15,17 +15,41 @@ export default {
         }
     },
     methods: {
+        // 返回上一页
         onClickLeft() {
-            this.$router.go(-1)
+            this.$router.push('/user/base/index')
         },
+        // 新增
         onAdd()
         {
             this.$router.push('/user/address/add')
         },
-        onEdit()
+        // 编辑
+        onEdit(value)
         {
-
+            this.$router.push({path:'/user/address/edit',query:{addressid:value.id}})
         },
+        // 设置默认地址
+        async onSelect(value){
+            let data = {
+                id:value.id,
+                userid:this.LoginUser.id
+            }
+
+            let result = await this.$api.AddressSelect(data)
+
+            if(result.code === 0)
+            {
+                this.$notify({
+                    type:'warning',
+                    message:result.msg,
+                })
+                return false
+            }
+
+            this.AddressList()
+        },
+        // 收货地址列表
         async AddressList()
         {
             let result = await this.$api.AddressIndex({userid:this.LoginUser.id})
@@ -39,14 +63,26 @@ export default {
                 return false
             }
 
-            // let AddressData = []
+            let AddressData = []
 
-            // for(let item of result.data)
-            // {
-                
-            // }
+            for(let item of result.data)
+            {
+                if(item.status == 1)
+                {
+                    this.chosenAddressId = item.id
+                }
+                AddressData.push({
+                    id:item.id,
+                    name:item.consignee,
+                    tel:item.mobile,
+                    address:item.region_text + ' ' +item.address,
+                    isDefault:item.status == 1 ? true : false
+                })
+            }
+             this.list = AddressData
         }
     },
+    // 生命周期
     created() {
         this.AddressList()
     },
