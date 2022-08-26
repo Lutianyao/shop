@@ -98,8 +98,24 @@ export default {
             
         },
         // 删除
-        onDelete(){
-            
+        async onDelete(){
+            let result = await this.$api.AddressDelete({addressid:this.addressid})
+
+            if(result.code === 1)
+            {
+                this.$notify({
+                    type:'success',
+                    message:result.msg,
+                    onClose:() => {
+                        this.$router.push('/user/address/index')
+                    }
+                })
+            }else{
+                this.$notify({
+                    type:'warning',
+                    message:result.msg,
+                })
+            }
         }
     },
 }

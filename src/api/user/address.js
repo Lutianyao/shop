@@ -15,6 +15,13 @@ export default {
             params: data
         })
     },
+    // 设置默认地址
+    AddressSelect(data = {}){
+        return POST({
+            url:'/user/address/select',
+            params: data
+        })
+    },
     // 收货地址详情
     addressInfo(data = {}){
         return POST({
@@ -29,11 +36,11 @@ export default {
             params: data
         })
     },
-    // 设置默认地址
-    AddressSelect(data = {}){
+    // 删除收货地址
+    AddressDelete(data = {}){
         return POST({
-            url:'/user/address/select',
+            url:'/user/address/delete',
             params: data
         })
-    }
+    },
 }
