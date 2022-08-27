@@ -9,4 +9,11 @@ export default{
             params:data
         })
     },
+    TypeProduct(data = {})
+    {
+        return POST({
+            url:'/product/type/product',
+            params:data
+        })
+    },
 }
