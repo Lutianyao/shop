@@ -1,61 +1,86 @@
 <template>
     <van-nav-bar title="商品分类" />
-    <div class="m-scrolltab" data-ydui-scrolltab>
-        <!-- 侧边导航 -->
-        <div class="scrolltab-nav">
-            <van-sidebar v-model="active" @change="onChange">
-                <van-sidebar-item v-for="item in typeList" :title="item.name" />
-            </van-sidebar>
-        </div>
-        <!-- 容器 -->
-        <div class="scrolltab-content">
-            <div class="scrolltab-content-item">
-                <div class="aui-flex-links" v-if="ProductList.length > 0">
-                    <a href="list.html" class="aui-flex-links-item" v-for="item in ProductList">
-                        <div class="aui-flex-links-img"> <img :src="item.cover_cdn" alt=""> </div>
-                        <div class="aui-flex-links-text">{{ item.name }}</div>
-                    </a>
-                </div>
-                <van-empty description="暂无商品~~" v-else />
+
+    <van-tree-select v-model:main-active-index="activeIndex" height="90vh" :items="TypeList" @click-nav="onType">
+        <template #content>
+            <div class="mainWarp" style="background:#f3f3f3;">
+                <ul class="proul" v-if="ProList.length > 0">
+                    <li v-for="item in ProList" :key="item.id">
+                        <router-link :to="{ path: '/product/product/info', query: { proid: item.id } }"><img
+                                :src="item.cover_cdn" /></router-link>
+                        <router-link :to="{ path: '/product/product/info', query: { proid: item.id } }">
+                            <p class="tit">{{ item.name }}</p>
+                        </router-link>
+                        <div class="price">
+                            <p v-if="item.vip_price">￥{{ item.vip_price }}<span>￥{{ item.price }}</span></p>
+                            <p v-else>￥{{ item.price }}</p>
+                        </div>
+                    </li>
+                </ul>
+
+                <van-empty description="此分类暂无商品" v-else />
+
             </div>
-        </div>
-    </div>
+        </template>
+    </van-tree-select>
+
+
     <Tab />
 </template>
-
 <script>
 import Tab from 'components/common/Tab.vue'
 export default {
     components: {
         Tab
     },
-    created() {
-        this.TypeList()
-    },
     data() {
         return {
-            active: 0,
-            Typeid: 0,
-            typeList: [],
-            ProductList: []
+            activeIndex: 0,
+            items: [{ text: '分组 1' }, { text: '分组 2' }],
+            TypeList: [],
+            ProList: [],
+            typeid: 0,
         }
     },
     methods: {
-        async onChange(value) {
-            let Typeid = this.typeList[value].id
-            let result = await this.$api.TypeProduct({ typeid: Typeid });
-            this.ProductList = result.data
+        async TypeData() {
+            let result = await this.$api.TypeIndex()
+
+            if (result.code === 1) {
+                let data = []
+
+                for (let item of result.data) {
+                    data.push({ text: item.name, id: item.id })
+                }
+
+                this.TypeList = data
+
+                this.ProductList()
+            }
+        },
+        async ProductList() {
+            let data = {
+                typeid: this.typeid ? this.typeid : this.TypeList[this.activeIndex].id
+            }
+
+            let result = await this.$api.ProductIndex(data)
+
+            if (result.code === 1) {
+                this.ProList = result.data
+            }
 
         },
-        async TypeList() {
-            let result = await this.$api.TypeIndex();
-            if (result.code == 1) {
-                this.typeList = result.data
-            }
+        onType(value) {
+
+            this.typeid = this.TypeList[value].id
+
+            this.ProductList()
         }
-    }
+    },
+    created() {
+        this.TypeData()
+
+
+    },
 }
 </script>
-<style>
-@import url('/assets/css/typelist.css');
-</style>

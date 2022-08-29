@@ -3,7 +3,7 @@
 
     <van-nav-bar title="购物车" v-else />
 
-    <van-checkbox-group v-model="checked">
+    <van-checkbox-group v-model="checked" ref="group">
         <div v-if="CartList.length > 0">
             <van-swipe-cell v-for="item in CartList" :key="item.id">
                 <van-card :price="item.total" :title="item.product.name" class="goods-card">
@@ -30,8 +30,8 @@
 
     </van-checkbox-group>
 
-    <van-submit-bar :price="3050" button-text="提交订单" @submit="onSubmit" :class="action ? '' : 'bar'">
-        <van-checkbox v-model="checked">全选</van-checkbox>
+    <van-submit-bar :price="total" button-text="提交订单" @submit="onSubmit" :class="action ? '' : 'bar'">
+        <van-checkbox v-model="checkbox" @click="onChecked">{{ checkbox ? '取消全选' : '全选' }}</van-checkbox>
     </van-submit-bar>
 
     <Tab v-if="!action" />
@@ -55,7 +55,27 @@ export default {
             action: '',
             checked: [],
             CartList: [],
-            LoginUser: this.$cookies.get('LoginUser')
+            LoginUser: this.$cookies.get('LoginUser'),
+            checkbox: false
+        }
+    },
+    // 计算属性
+    computed: {
+        total() {
+            if (this.checked.length <= 0) {
+                return 0
+            }
+
+            let total = 0
+
+            for (let item of this.CartList) {
+                // php in_array
+                if (this.checked.includes(item.id)) {
+                    total += parseFloat(item.total)
+                }
+            }
+
+            return total * 100
         }
     },
     methods: {
@@ -77,7 +97,25 @@ export default {
             }
         },
         onSubmit() {
+            if (this.checked.length <= 0) {
+                this.$notify({
+                    type: 'warning',
+                    message: '请选择商品结算',
+                })
 
+                return false
+            }
+
+            let ids = this.checked.join(',')
+
+            this.$router.push({ path: '/product/cart/confirm', query: { ids: ids } })
+        },
+        onChecked() {
+            if (this.checkbox) {
+                this.$refs.group.toggleAll(true)
+            } else {
+                this.$refs.group.toggleAll(false)
+            }
         }
     },
 }

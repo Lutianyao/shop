@@ -2,6 +2,7 @@
 import {GET,POST,UPLOAD} from '@/services/request.js'
 
 export default{
+    // 购物车页面
     CartIndex(data = {})
     {
         return POST({
@@ -9,6 +10,7 @@ export default{
             params:data
         })
     },
+    // 加入购物车
     CartAdd(data = {})
     {
         return POST({
@@ -16,10 +18,19 @@ export default{
             params:data
         })
     },
+    // 购物车页面商品数量加减
     CartStepper(data = {})
     {
         return POST({
             url:'/product/cart/stepper',
+            params:data
+        })
+    },
+    // 订单支付
+    ConfirmList(data = {})
+    {
+        return POST({
+            url:'/product/cart/confirm',
             params:data
         })
     }

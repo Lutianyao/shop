@@ -1,46 +1,53 @@
 // 引入封装服务
-import {GET,POST,UPLOAD} from '@/services/request.js'
+import { GET, POST, UPLOAD } from '@/services/request.js'
 
 export default {
-    AddressIndex(data = {}){
+    AddressIndex(data = {}) {
         return POST({
-            url:'/user/address/index',
+            url: '/user/address/index',
             params: data
         })
     },
     // 新增收货地址
-    AddressAdd(data = {}){
+    AddressAdd(data = {}) {
         return POST({
-            url:'/user/address/add',
+            url: '/user/address/add',
             params: data
         })
     },
     // 设置默认地址
-    AddressSelect(data = {}){
+    AddressSelect(data = {}) {
         return POST({
-            url:'/user/address/select',
+            url: '/user/address/select',
             params: data
         })
     },
     // 收货地址详情
-    addressInfo(data = {}){
+    addressInfo(data = {}) {
         return POST({
-            url:'/user/address/info',
+            url: '/user/address/info',
             params: data
         })
     },
     // 编辑收货地址
-    AddressEdit(data = {}){
+    AddressEdit(data = {}) {
         return POST({
-            url:'/user/address/edit',
+            url: '/user/address/edit',
             params: data
         })
     },
     // 删除收货地址
-    AddressDelete(data = {}){
+    AddressDelete(data = {}) {
         return POST({
-            url:'/user/address/delete',
+            url: '/user/address/delete',
             params: data
         })
     },
+    // 订单结算时获取一个默认地址
+    AddressOrder(data = {}) {
+        return POST({
+            url: '/user/address/order',
+            params: data
+        })
+    }
 }
