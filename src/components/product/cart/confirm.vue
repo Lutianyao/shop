@@ -73,20 +73,45 @@ export default {
 
             this.list = result.data
         },
-        onSubmit() {
+        async onSubmit(value)
+        {
+            // 订单数据
+            let data = {
+                userid:this.LoginUser.id, // 下单用户
+                cartid:this.ids,
+                addrid:this.address.id,
+                content:this.content
+            }
+            
+            let result = await this.$api.OrderAdd(data)
+
+            if(result.code === 1)
+            {
+                this.$notify({
+                    type:'success',
+                    message:result.msg,
+                    onClose:() => {
+                        this.$router.push({path:'/order/order/info',query:{orderid:result.data.orderid}})
+                    }
+                })
+            }else{
+                this.$notify({
+                    type:'warning',
+                    message:result.msg,
+                })
+            }
 
         }
     },
+    // 计算属性
     computed: {
         total() {
             let total = 0
-
             if (this.list.length > 0) {
                 for (let item of this.list) {
                     total += parseFloat(item.total)
                 }
             }
-
             return total * 100
         }
     }

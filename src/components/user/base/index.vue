@@ -2,8 +2,8 @@
     <div class="myBox">
         <div class="L"><img :src="LoginUser.avatar" /></div>
         <div class="C">
-            <div class="tit">{{LoginUser.nickname}}</div>
-            <div class="sub">{{LoginUser.email}}</div>
+            <div class="tit">{{ LoginUser.nickname }}</div>
+            <div class="sub">{{ LoginUser.email }}</div>
         </div>
         <div class="R"><img src="/assets/images/go.png" /></div>
     </div>
@@ -20,7 +20,7 @@
         <p>我的收货地址</p>
         <img src="/assets/images/go.png">
     </div>
-    <div class="myboxcon">
+    <div class="myboxcon" @click="Order">
         <p>我的订单</p>
         <img src="/assets/images/go.png">
     </div>
@@ -41,25 +41,24 @@
 <script>
 import Tab from 'components/common/Tab.vue'
 export default {
-    components:{
+    components: {
         Tab
     },
     data() {
         return {
-            LoginUser:this.$cookies.get('LoginUser') ? this.$cookies.get('LoginUser') : {}
+            LoginUser: this.$cookies.get('LoginUser') ? this.$cookies.get('LoginUser') : {}
         }
     },
     methods: {
-        onLogout()
-        {
+        onLogout() {
             this.$dialog.confirm({
-                message:'确认退出账号'
+                message: '确认退出账号'
             }).then(() => {
 
                 this.$notify({
-                    type:'success',
-                    message:'退出成功',
-                    onClose:() => {
+                    type: 'success',
+                    message: '退出成功',
+                    onClose: () => {
 
                         this.$cookies.remove('LoginUser')
 
@@ -70,14 +69,15 @@ export default {
                 console.log('点击取消')
             })
         },
-        onProfile()
-        {
+        onProfile() {
             // 设置跳转路由
             this.$router.push('/user/base/profile')
         },
-        Address()
-        {
+        Address() {
             this.$router.push('/user/address/index')
+        },
+        Order() {
+            this.$router.push('/order/order/index')
         }
     },
 }
