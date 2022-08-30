@@ -8,5 +8,12 @@ export default{
             url:'/order/order/add',
             params:data
         })
+    },
+    OrderGain(data = {})
+    {
+        return POST({
+            url:'/order/order/gain',
+            params:data
+        })
     }
 }

@@ -23,7 +23,7 @@
         <van-action-bar-icon icon="chat-o" text="客服" />
         <van-action-bar-icon icon="cart-o" :to="{path:'/product/cart/index',query:{action:'cart'}}" text="购物车" />
         <van-action-bar-button type="warning" text="加入购物车" @click="onCart" />
-        <van-action-bar-button type="danger" text="立即购买" />
+        <van-action-bar-button type="danger" text="立即购买" @click="onBuy"/>
     </van-action-bar>
 
 
@@ -118,6 +118,30 @@ export default {
                     message: result.msg,
                 })
             }
+        },
+        async onBuy(){
+            // 判断是否登录状态
+            if (!this.LoginUser || JSON.stringify(this.LoginUser) == '{}') {
+                this.$toast.loading({
+                    type: 'fail',
+                    message: '请先登录',
+                    onClose: () => {
+                        this.$dialog.confirm({
+                            message:
+                                '是否需要登录？',
+                        })
+                            .then(() => {
+                                this.$router.push('/user/base/login')
+                            })
+                            .catch(() => {
+
+                            });
+                    }
+                })
+                return false
+            }
+            
+            this.$router.push({ path: '/product/cart/confirm', query: { proid: this.proid } })
         }
     },
 }
