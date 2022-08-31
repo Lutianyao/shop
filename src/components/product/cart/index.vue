@@ -17,11 +17,12 @@
                     </template>
 
                     <template #desc>
-                        <span>商品单价：￥{{ item.price }}</span>
+                        <span>商品单价：￥{{  item.price  }}</span>
                     </template>
                 </van-card>
                 <template #right>
-                    <van-button square text="删除" type="danger" class="delete-button" />
+                    <van-button square text="删除" type="danger" class="delete-button"
+                        @click="onDel({ cartid: item.id })" />
                 </template>
             </van-swipe-cell>
         </div>
@@ -30,8 +31,9 @@
 
     </van-checkbox-group>
 
-    <van-submit-bar :price="total" button-text="提交订单" @submit="onSubmit" :class="action ? '' : 'bar'">
-        <van-checkbox v-model="checkbox" @click="onChecked">{{ checkbox ? '取消全选' : '全选' }}</van-checkbox>
+    <van-submit-bar v-if="CartList.length > 0" :price="total" button-text="提交订单" @submit="onSubmit"
+        :class="action ? '' : 'bar'">
+        <van-checkbox v-model="checkbox" @click="onChecked">{{  checkbox ? '取消全选' : '全选'  }}</van-checkbox>
     </van-submit-bar>
 
     <Tab v-if="!action" />
@@ -82,6 +84,7 @@ export default {
         onClickLeft() {
             this.$router.go(-1)
         },
+        // 查询购物车数据
         async CartData() {
             let result = await this.$api.CartIndex({ userid: this.LoginUser.id })
 
@@ -89,6 +92,7 @@ export default {
                 this.CartList = result.data
             }
         },
+        // 增减商品数量
         async onStepper(value) {
             let result = await this.$api.CartStepper(value)
 
@@ -96,6 +100,7 @@ export default {
                 this.CartData()
             }
         },
+        // 结算按钮
         onSubmit() {
             if (this.checked.length <= 0) {
                 this.$notify({
@@ -105,17 +110,33 @@ export default {
 
                 return false
             }
-
+            // 将多选的购物车id数组转为字符串
             let ids = this.checked.join(',')
-
             this.$router.push({ path: '/product/cart/confirm', query: { ids: ids } })
         },
+        // 全选
         onChecked() {
             if (this.checkbox) {
                 this.$refs.group.toggleAll(true)
             } else {
                 this.$refs.group.toggleAll(false)
             }
+        },
+        // 删除
+        onDel(value) {
+            this.$dialog.confirm({
+                message:
+                    '确定将商品移出购物车？',
+            })
+                .then(async () => {
+                    let result = await this.$api.CartDel(value)
+                    this.$toast(result.msg);
+                    location.reload();
+                })
+                .catch(() => {
+                    // on cancel
+                });
+                
         }
     },
 }

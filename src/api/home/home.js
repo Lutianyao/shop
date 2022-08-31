@@ -8,5 +8,12 @@ export default {
             url:'/home/index',
             params:data
         })
+    },
+    Search(data = {})
+    {
+        return POST({
+            url:'/home/search',
+            params:data
+        })
     }
 }
