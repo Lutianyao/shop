@@ -97,7 +97,6 @@ export default {
                     return false
                 }
                 this.product = result.data
-                console.log(this.product);
             }
 
         },
@@ -163,6 +162,8 @@ export default {
                 for (let item of this.list) {
                     total += parseFloat(item.total)
                 }
+            }else{
+                total = this.product.price
             }
             return total * 100
         }

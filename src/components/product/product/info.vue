@@ -19,7 +19,7 @@
     </div>
     <div class="detailbox_2" v-html="info.content"></div>
 
-    <van-action-bar>
+    <van-action-bar style="max-width:512px">
         <van-action-bar-icon icon="chat-o" text="客服" />
         <van-action-bar-icon icon="cart-o" :to="{path:'/product/cart/index',query:{action:'cart'}}" text="购物车" />
         <van-action-bar-button type="warning" text="加入购物车" @click="onCart" />
