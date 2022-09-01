@@ -99,17 +99,6 @@ export default {
                 this.$toast.loading({
                     type: 'success',
                     message: result.msg,
-                    onClose: () => {
-                        this.$dialog.confirm({
-                            message: '是否跳转购物车？',
-                        })
-                            .then(() => {
-                                this.$router.push({path:'/product/cart/index',query:{action:'cart'}})
-                            })
-                            .catch(() => {
-
-                            });
-                    }
                 })
                 return false
             } else {

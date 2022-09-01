@@ -12,7 +12,7 @@
         <p>基本资料</p>
         <img src="/assets/images/go.png">
     </div>
-    <div class="myboxcon">
+    <div class="myboxcon" @click="onemailauth">
         <p>邮箱认证</p>
         <img src="/assets/images/go.png">
     </div>
@@ -24,11 +24,15 @@
         <p>我的订单</p>
         <img src="/assets/images/go.png">
     </div>
-    <div class="myboxcon">
+    <div class="myboxcon" @click="onRecord">
         <p>消费记录</p>
         <img src="/assets/images/go.png">
     </div>
-    <div class="myboxcon">
+    <div class="myboxcon" @click="onPay">
+        <p>充值中心</p>
+        <img src="/assets/images/go.png">
+    </div>
+    <div class="myboxcon" @click="onPayRecord">
         <p>充值记录</p>
         <img src="/assets/images/go.png">
     </div>
@@ -66,18 +70,34 @@ export default {
                     }
                 })
             }).catch(() => {
-                console.log('点击取消')
+                
             })
         },
         onProfile() {
             // 设置跳转路由
             this.$router.push('/user/base/profile')
         },
+        onemailauth() {
+            if(this.LoginUser.auth==1){
+                this.$toast('您已认证，无需重复认证');
+                return false;
+            }
+            this.$router.push('/user/base/emailauth')
+        },
         Address() {
             this.$router.push('/user/address/index')
         },
         Order() {
             this.$router.push('/order/order/index')
+        },
+        onRecord() {
+            this.$router.push('/user/base/record')
+        },
+        onPay() {
+            this.$router.push('/user/base/pay')
+        },
+        onPayRecord() {
+            this.$router.push('/user/base/payrecord')
         }
     },
 }
