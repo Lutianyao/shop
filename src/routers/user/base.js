@@ -28,30 +28,45 @@ export default [
     {
         path: 'base/profile',
         name: 'BaseProfile',
-        component: () => import('components/user/base/profile.vue')
+        component: () => import('components/user/base/profile.vue'),
+        meta: {
+            IsLogin: true
+        }
     },
     // 邮箱认证
     {
         path: 'base/emailauth',
         name: 'BaseEmailauth',
-        component: () => import('components/user/base/emailauth.vue')
+        component: () => import('components/user/base/emailauth.vue'),
+        meta: {
+            IsLogin: true
+        }
     },
     // 消费记录
     {
         path: 'base/record',
         name: 'BaseRecord',
-        component: () => import('components/user/base/record.vue')
+        component: () => import('components/user/base/record.vue'),
+        meta: {
+            IsLogin: true
+        }
     },
     // 充值中心
     {
         path: 'base/pay',
         name: 'BasePay',
-        component: () => import('components/user/base/pay.vue')
+        component: () => import('components/user/base/pay.vue'),
+        meta: {
+            IsLogin: true
+        }
     },
     // 充值记录
     {
         path: 'base/payrecord',
         name: 'BasePayrecord',
-        component: () => import('components/user/base/payrecord.vue')
+        component: () => import('components/user/base/payrecord.vue'),
+        meta: {
+            IsLogin: true
+        }
     },
 ]

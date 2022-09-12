@@ -49,6 +49,9 @@ Routers.beforeEach(async (to, form, next) => {
             app.$cookies.remove('LoginUser')
             next('/user/base/login')
             return false
+        } else {
+            app.$cookies.set('LoginUser', result.data)
+            next()
         }
         next()
     } else {
