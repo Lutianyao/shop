@@ -26,7 +26,7 @@ export default defineConfig({
       //设置代理请求 当代理商识别你的请求如果前缀是 /api的话 就会自动转移
       '/api': {
         // http://www.k2217.com/api/user/base/login
-        target: 'http://www.lty.com/api',
+        target: 'https://www.ask.lutianyao.cn/api',
         changeOrigin:true,  //跨域
         //替换掉api前缀 防止多个api地址
         rewrite: (path) => path.replace(/^\/api/, '')
