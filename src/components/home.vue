@@ -15,7 +15,8 @@
                 <div class="con">
                     <router-link :to="{ path: '/product/product/info', query: { proid: item.id } }">
                         <img :src="item.cover_cdn">
-                        <p><span>￥</span>{{  item.price  }}</p>
+                        <p v-if="item.vip_price">￥{{ item.vip_price }}<span class="span">￥{{ item.price }}</span></p>
+                        <p v-else>￥{{ item.price }}</p>
                     </router-link>
                 </div>
             </li>
@@ -35,7 +36,7 @@
                 <li v-for="item in TypeList" :key="item.id">
                     <router-link :to="{ path: '/product/product/index', query: { typeid: item.id } }"><img
                             :src="item.cover_cdn">
-                        <p>{{  item.name  }}</p>
+                        <p>{{ item.name }}</p>
                     </router-link>
                 </li>
             </ul>
@@ -49,7 +50,8 @@
                 <div class="con">
                     <router-link :to="{ path: '/product/product/info', query: { proid: item.id } }">
                         <img :src="item.cover_cdn">
-                        <p><span>￥</span>{{  item.price  }}</p>
+                        <p v-if="item.vip_price">￥{{ item.vip_price }}<span class="span">￥{{ item.price }}</span></p>
+                        <p v-else>￥{{ item.price }}</p>
                     </router-link>
                 </div>
             </li>
@@ -58,12 +60,13 @@
         <div class="contitbox">
             <p>热销</p>
         </div>
-        <ul class="proul_2">
+        <ul class="proul">
             <li v-for="item in HotList" :key="item.id">
                 <div class="con">
                     <router-link :to="{ path: '/product/product/info', query: { proid: item.id } }">
                         <img :src="item.cover_cdn">
-                        <p><span>￥</span>{{  item.price  }}</p>
+                        <p v-if="item.vip_price">￥{{ item.vip_price }}<span class="span">￥{{ item.price }}</span></p>
+                        <p v-else>￥{{ item.price }}</p>
                     </router-link>
                 </div>
             </li>
@@ -72,12 +75,13 @@
         <div class="contitbox">
             <p>新品</p>
         </div>
-        <ul class="proul_2">
+        <ul class="proul">
             <li v-for="item in NewList" :key="item.id">
                 <div class="con">
                     <router-link :to="{ path: '/product/product/info', query: { proid: item.id } }">
                         <img :src="item.cover_cdn">
-                        <p><span>￥</span>{{  item.price  }}</p>
+                        <p v-if="item.vip_price">￥{{ item.vip_price }}<span class="span">￥{{ item.price }}</span></p>
+                        <p v-else>￥{{ item.price }}</p>
                     </router-link>
                 </div>
             </li>
@@ -88,10 +92,13 @@
 </template>
 <script>
 import Tab from 'components/common/Tab.vue'
-import { Search } from 'vant';
 export default {
     components: {
         Tab
+    },
+    // 生命周期
+    created() {
+        this.GetData()
     },
     data() {
         return {
@@ -101,6 +108,7 @@ export default {
             NewList: [],
             value: '',
             SearchList: [],
+            LoginUser: this.$cookies.get('LoginUser')
         }
     },
     methods: {
@@ -108,7 +116,7 @@ export default {
             location.reload();
         },
         async GetData() {
-            let result = await this.$api.HomeList()
+            let result = await this.$api.HomeList({userid:this.LoginUser.id})
             if (result.code === 1) {
                 this.TypeList = result.data.TypeList
                 this.RecomList = result.data.RecomList
@@ -124,15 +132,15 @@ export default {
                 })
                 return false
             }
-            let result = await this.$api.Search({ proname: this.value })
+            let result = await this.$api.Search({ proname: this.value, userid: this.LoginUser.id })
             // console.log(result);
             if (result.code == 1) {
                 if (result.data.length == 0) {
                     this.$toast.loading({
-                    type: 'fail',
-                    message: '暂无相关商品',
-                })
-                return false
+                        type: 'fail',
+                        message: '暂无相关商品',
+                    })
+                    return false
                 }
                 this.SearchList = result.data
             }
@@ -140,10 +148,14 @@ export default {
         onClickButton() {
             this.onSearch()
         }
-    },
-    // 生命周期
-    created() {
-        this.GetData()
-    },
+    }
 }
 </script>
+<style>
+.span {
+    font-size: 12px;
+    color: #bbb;
+    padding-left: 10px;
+    text-decoration: line-through
+}
+</style>
