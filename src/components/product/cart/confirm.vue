@@ -86,7 +86,8 @@ export default {
             } else {
                 let data = {
                     action: 'info',
-                    proid: this.proid
+                    proid: this.proid,
+                    userid:this.LoginUser.id
                 }
                 let result = await this.$api.ConfirmList(data)
                 if (result.code === 0) {
