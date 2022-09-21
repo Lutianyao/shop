@@ -1,5 +1,5 @@
 <template>
-    <div class="myBox">
+    <div class="myBox" :style="{ background: 'url(' + LoginUser.cover + ')' }">
         <div class="L"><img :src="LoginUser.avatar" /></div>
         <div class="C">
             <div class="tit">{{ LoginUser.nickname }}</div>
@@ -78,10 +78,6 @@ export default {
             this.$router.push('/user/base/profile')
         },
         onemailauth() {
-            if(this.LoginUser.auth==1){
-                this.$toast('您已认证，无需重复认证');
-                return false;
-            }
             this.$router.push('/user/base/emailauth')
         },
         Address() {

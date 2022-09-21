@@ -108,7 +108,7 @@ export default {
             NewList: [],
             value: '',
             SearchList: [],
-            LoginUser: this.$cookies.get('LoginUser')
+            LoginUser: this.$cookies.get('LoginUser')?this.$cookies.get('LoginUser'):0
         }
     },
     methods: {
@@ -133,7 +133,6 @@ export default {
                 return false
             }
             let result = await this.$api.Search({ proname: this.value, userid: this.LoginUser.id })
-            // console.log(result);
             if (result.code == 1) {
                 if (result.data.length == 0) {
                     this.$toast.loading({
