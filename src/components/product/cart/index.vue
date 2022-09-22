@@ -8,7 +8,7 @@
             <van-swipe-cell v-for="item in CartList" :key="item.id">
                 <van-card :price="item.total" :title="item.product.name" class="goods-card">
                     <template #thumb>
-                        <van-checkbox :name="item.id" class="checkbox"></van-checkbox>
+                        <van-checkbox :name="item.id" class="checkbox" @click="onCheck"></van-checkbox>
                         <img :src="item.product.cover_cdn">
                     </template>
 
@@ -100,6 +100,14 @@ export default {
                 this.CartData()
             }
         },
+        // 单选
+        onCheck(){
+            if (this.checked.length ==this.CartList.length) {
+                this.checkbox=true
+            }else{
+                this.checkbox=false
+            }
+        },
         // 结算按钮
         onSubmit() {
             if (this.checked.length <= 0) {
@@ -107,7 +115,6 @@ export default {
                     type: 'warning',
                     message: '请选择商品结算',
                 })
-
                 return false
             }
             // 将多选的购物车id数组转为字符串
