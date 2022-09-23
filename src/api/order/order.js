@@ -1,37 +1,40 @@
 // 引入封装服务
-import {GET,POST,UPLOAD} from '@/services/request.js'
+import { GET, POST, UPLOAD } from '@/services/request.js'
 
-export default{
+export default {
     // 订单列表
-    OrderIndex(data = {})
-    {
+    OrderIndex(data = {}) {
         return POST({
-            url:'/order/order/index',
-            params:data
+            url: '/order/order/index',
+            params: data
         })
     },
     // 新增订单（购物车）
-    OrderAdd(data = {})
-    {
+    OrderAdd(data = {}) {
         return POST({
-            url:'/order/order/add',
-            params:data
+            url: '/order/order/add',
+            params: data
         })
     },
     // 新增订单（立即购买）
-    OrderGain(data = {})
-    {
+    OrderGain(data = {}) {
         return POST({
-            url:'/order/order/gain',
-            params:data
+            url: '/order/order/gain',
+            params: data
         })
     },
     // 订单详情
-    OrderInfo(data = {})
-    {
+    OrderInfo(data = {}) {
         return POST({
-            url:'/order/order/info',
-            params:data
+            url: '/order/order/info',
+            params: data
         })
-    }
+    },
+    // 退货
+    ProAfter(data = {}) {
+        return POST({
+            url: '/order/order/after',
+            params: data
+        })
+    },
 }

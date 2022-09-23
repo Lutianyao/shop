@@ -25,7 +25,7 @@
                     <div class="btn">
                         <van-button type="primary" size="mini" color="#7232dd"
                             :to="{ path: '/order/order/info', query: { orderid: item.id } }">订单详情</van-button>
-                        <van-button type="primary" size="mini" v-if="item.status >= 1 && item.status <= 4">申请售后
+                        <van-button type="primary" size="mini" @click="onAfter({ orderid: item.id })" v-if="item.status >= 1 && item.status <= 4">申请退货
                         </van-button>
                         <van-button type="primary" size="mini"
                             v-if="(item.status >= 2 && item.status <= 4) || item.status < 0">查看物流</van-button>
@@ -98,6 +98,22 @@ export default {
         },
         onTab() {
             this.OrderData()
+        },
+        onAfter(value){
+            this.$dialog.confirm({
+                message:
+                    '确定申请退货？',
+            })
+                .then(async () => {
+                    let result = await this.$api.ProAfter(value)
+                    this.$toast(result.msg);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                })
+                .catch(() => {
+                    // on cancel
+                });
         }
     },
 }
@@ -137,5 +153,11 @@ export default {
 
 .item .footer .date {
     font-weight: bold;
+}
+.item .footer .btn {
+    display: flex;
+}
+.item .footer .btn button{
+    padding: 0px 3px;
 }
 </style>
