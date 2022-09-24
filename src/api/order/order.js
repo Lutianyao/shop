@@ -37,4 +37,25 @@ export default {
             params: data
         })
     },
+    // 确认收货
+    Receipt(data = {}) {
+        return POST({
+            url: '/order/order/receipt',
+            params: data
+        })
+    },
+    // 评价
+    Rate(data = {}) {
+        return POST({
+            url: '/order/order/rate',
+            params: data
+        })
+    },
+    // 删除订单
+    Del(data = {}) {
+        return POST({
+            url: '/order/order/del',
+            params: data
+        })
+    },
 }

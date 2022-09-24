@@ -23,20 +23,39 @@
                 <div class="footer">
                     <div class="date">{{ item.createtime }}</div>
                     <div class="btn">
+                        <!-- 订单详情 -->
                         <van-button type="primary" size="mini" color="#7232dd"
-                            :to="{ path: '/order/order/info', query: { orderid: item.id } }">订单详情</van-button>
-                        <van-button type="primary" size="mini" @click="onAfter({ orderid: item.id })" v-if="item.status >= 1 && item.status <= 4">申请退货
+                            :to="{ path: '/order/order/info', query: { orderid: item.id } }">订单详情
                         </van-button>
+                        <!-- 申请退货 -->
+                        <van-button type="primary" size="mini" @click="onAfter({ orderid: item.id })"
+                            v-if="item.status >= 1 && item.status <= 4">申请退货
+                        </van-button>
+                        <!-- 查看物流 -->
                         <van-button type="primary" size="mini"
-                            v-if="(item.status >= 2 && item.status <= 4) || item.status < 0">查看物流</van-button>
-                        <van-button type="primary" size="mini" v-if="item.status == 2">确认收货</van-button>
-                        <van-button type="primary" size="mini" v-if="item.status == 3">立即评价</van-button>
-                        <van-button type="danger" size="mini" v-if="item.status >= 3">删除订单</van-button>
+                            :to="{ path: '/order/order/logistics', query: { orderid: item.id } }"
+                            v-if="(item.status >= 2 && item.status <= 4) || item.status < 0">查看物流
+                        </van-button>
+                        <!-- 确认收货 -->
+                        <van-button type="primary" size="mini" @click="onReceipt({ orderid: item.id })"
+                            v-if="item.status == 2">确认收货
+                        </van-button>
+                        <!-- 立即评价 -->
+                        <van-button type="primary" size="mini" v-if="item.status == 3">
+                            <van-cell @click="showPopup(item.id)">立即评价</van-cell>
+                        </van-button>
+                        <!-- 删除订单 -->
+                        <van-button type="danger" size="mini" @click="onDel({ orderid: item.id })" v-if="item.status >= 3">删除订单</van-button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <van-popup class="rate" position="bottom" v-model:show="show">
+        <van-rate size="30px" v-model="value" />
+        <text>您的五星好评，是我们无限的动力</text>
+        <van-button round type="primary" @click="onRate" block>评价</van-button>
+    </van-popup>
 
 </template>
 <script>
@@ -83,12 +102,16 @@ export default {
             ],
             OrderList: [],
             LoginUser: this.$cookies.get('LoginUser'),
+            value: 0,
+            show: false,
+            orderid: 0
         }
     },
     methods: {
         onClickLeft() {
             this.$router.push('/user/base/index')
         },
+        // 请求订单列表
         async OrderData() {
             let result = await this.$api.OrderIndex({ userid: this.LoginUser.id, status: this.active })
 
@@ -96,10 +119,12 @@ export default {
                 this.OrderList = result.data
             }
         },
+        // 切换选项卡
         onTab() {
             this.OrderData()
         },
-        onAfter(value){
+        // 申请退货
+        onAfter(value) {
             this.$dialog.confirm({
                 message:
                     '确定申请退货？',
@@ -114,7 +139,70 @@ export default {
                 .catch(() => {
                     // on cancel
                 });
-        }
+        },
+        // 确认收货
+        onReceipt(value) {
+            this.$dialog.confirm({
+                message:
+                    '如果您没有收到货物，或者货物有问题，请及时申请退款，切勿点击"确认收货"',
+            })
+                .then(async () => {
+                    let result = await this.$api.Receipt(value)
+                    if (result.code == 0) {
+                        this.$toast.fail(result.msg);
+                        return false
+                    }
+                    this.$toast.success(result.msg);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                })
+                .catch(() => {
+                    // on cancel
+                });
+        },
+        // 点击评价展示内容
+        showPopup(value) {
+            this.show = true;
+            this.orderid = value
+        },
+        // 评价
+        async onRate() {
+            let data = {
+                orderid: this.orderid,
+                rate: this.value
+            }
+            let result = await this.$api.Rate(data)
+            if (result.code == 0) {
+                this.$toast.fail(result.msg);
+                return false
+            }
+            this.$toast(result.msg);
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+        },
+        // 确认收货
+        onDel(value) {
+            this.$dialog.confirm({
+                message:
+                    '确认删除该订单？',
+            })
+                .then(async () => {
+                    let result = await this.$api.Del(value)
+                    if (result.code == 0) {
+                        this.$toast.fail(result.msg);
+                        return false
+                    }
+                    this.$toast.success(result.msg);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                })
+                .catch(() => {
+                    // on cancel
+                });
+        },
     },
 }
 </script>
@@ -146,6 +234,7 @@ export default {
 
 .item .footer {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
@@ -154,10 +243,34 @@ export default {
 .item .footer .date {
     font-weight: bold;
 }
+
 .item .footer .btn {
     display: flex;
 }
-.item .footer .btn button{
+
+.item .footer .btn button {
     padding: 0px 3px;
+    overflow: hidden;
+}
+
+.item .footer .btn button .van-cell {
+    background-color: #1989fa;
+    padding: 0px;
+    font-size: 10px;
+}
+
+.item .footer .btn button .van-cell .van-cell__value {
+    color: white;
+}
+
+.rate {
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.rate text {
+    margin: 20px;
 }
 </style>

@@ -16,4 +16,12 @@ export default [
             IsLogin:true
         }
     },
+    {
+        // 查看物流
+        path:'order/logistics',
+        component:() => import('components/order/logistics.vue'),
+        meta:{
+            IsLogin:true
+        }
+    },
 ]
