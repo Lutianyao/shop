@@ -5,14 +5,14 @@ export default {
     HomeList(data = {})
     {
         return POST({
-            url:'/home/index',
+            url:'/Home/index',
             params:data
         })
     },
     Search(data = {})
     {
         return POST({
-            url:'/home/search',
+            url:'/Home/search',
             params:data
         })
     }
