@@ -25,7 +25,7 @@ export default {
     methods: {
         onClickLeft()
         {
-            this.$router.push('/user/address/index')
+            this.$router.go(-1)
         },
         async onSave(value)
         {
