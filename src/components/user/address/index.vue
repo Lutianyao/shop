@@ -22,11 +22,7 @@ export default {
     methods: {
         // 返回上一页
         onClickLeft() {
-            if (this.action == 'order') {
-                this.$router.go(-1)
-            } else {
-                this.$router.push('/user/base/index')
-            }
+            this.$router.go(-1)
         },
         // 新增
         onAdd() {
