@@ -11,6 +11,12 @@
 </template>
 <script>
 export default {
+    // 生命周期
+    created() {
+        let action = this.$route.query.action ? this.$route.query.action : ''
+        this.action = action
+        this.AddressList()
+    },
     data() {
         return {
             chosenAddressId: '1',
@@ -30,11 +36,19 @@ export default {
         },
         // 新增
         onAdd() {
-            this.$router.push('/user/address/add')
+            if (this.action == 'order') {
+                this.$router.push({ path: '/user/address/add', query: { action: 'order' } })
+            } else {
+                this.$router.push('/user/address/add')
+            }
         },
         // 编辑
         onEdit(value) {
-            this.$router.push({ path: '/user/address/edit', query: { addressid: value.id } })
+            if (this.action == 'order') {
+                this.$router.push({ path: '/user/address/edit', query: { action: 'order',addressid: value.id } })
+            } else {
+                this.$router.push({ path: '/user/address/edit', query: { addressid: value.id } })
+            }
         },
         // 设置默认地址
         async onSelect(value) {
@@ -94,13 +108,6 @@ export default {
 
             this.$router.go(-1)
         }
-    },
-    // 生命周期
-    created() {
-        let action = this.$route.query.action ? this.$route.query.action : ''
-
-        this.action = action
-        this.AddressList()
-    },
+    }
 }
 </script>
