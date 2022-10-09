@@ -102,7 +102,11 @@ export default {
                 .then(async () => {
                     let result = await this.$api.AddressDelete({ addressid: this.addressid })
                     this.$toast(result.msg);
-                    this.$router.push('/user/address/index')
+                    if (this.action == 'order') {
+                            this.$router.go(-1)
+                        } else {
+                            this.$router.push('/user/address/index')
+                        }
                 })
                 .catch(() => {
                     // on cancel
